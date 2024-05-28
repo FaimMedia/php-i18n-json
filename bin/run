@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+docker compose exec -T test /app/bin/i18n-json $@

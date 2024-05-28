@@ -1,0 +1,21 @@
+services:
+  test:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - ./bin:/app/bin
+      - ./src:/app/src
+      - ./test:/app/test
+      - ./vendor:/app/vendor
+    depends_on:
+      - composer
+  composer:
+    image: composer:2.7.2
+    volumes:
+      - ./vendor:/app/vendor:z
+      - ./composer.json:/app/composer.json:r
+    command:
+      - update
+      - --working-dir=/app
+      - --ignore-platform-reqs

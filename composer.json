@@ -1,0 +1,34 @@
+{
+	"name": "faimmedia/i18n-json",
+	"type": "library",
+	"license": "MIT",
+	"description": "Simple PHP library to validate and match JSON translation files, and also pretty format them.",
+	"version": "0.1",
+	"homepage": "https://faimmedia.nl",
+
+	"authors": [{
+		"name": "Tim Peters",
+		"role": "Lead Developer"
+	}],
+
+	"require": {
+		"php": "^8.2",
+		"ext-pdo": "*"
+	},
+
+	"require-dev": {
+		"phpunit/phpunit": "^10.3",
+		"friendsofphp/php-cs-fixer": "^3.57"
+	},
+
+	"bin": [
+        "bin/i18n-json"
+    ],
+
+	"autoload": {
+		"psr-4": {
+			"FaimMedia\\I18nJson\\": "src/",
+			"FaimMedia\\I18nJson\\Test\\": "test/"
+		}
+	}
+}

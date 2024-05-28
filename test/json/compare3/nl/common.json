@@ -1,0 +1,15 @@
+{
+	"nestedObject": {
+		"0": {
+			"3": "Test arg",
+			"2": "Second arg"
+		},
+		"1": {
+			"newKey": "Yes"
+		}
+	},
+	"textHomepage": [
+		"value1",
+		"value2"
+	]
+}
