@@ -226,6 +226,14 @@ class Compare
 	}
 
 	/**
+	 * Sort errors
+	 */
+	public function sortErrors(): void
+	{
+		//@todo
+	}
+
+	/**
 	 * Compare file
 	 *
 	 * @property string $file1 Base line json file
