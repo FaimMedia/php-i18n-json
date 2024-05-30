@@ -6,6 +6,10 @@ use FaimMedia\I18nJson\Compare\{
 	ErrorEnum,
 	Exception,
 };
+use FaimMedia\I18nJson\Output\{
+	Color,
+	ColorEnum,
+};
 
 /**
  * Error class
@@ -59,9 +63,36 @@ class Error
 	/**
 	 * Get message
 	 */
-	public function getMessage(): string
+	public function getMessage(bool $color = true): string
 	{
-		return 'Missing key ' . $this->key;
+		$color = ColorEnum::RED;
+		$message = "Missing key '" . $this->key . "'";
+
+		switch ($this->getType()) {
+			case ErrorEnum::FILE:
+				$message = 'This file does not exist';
+				break;
+			case ErrorEnum::FILE_OBSOLETE:
+				$color = ColorEnum::YELLOW;
+				$message = 'This file is obsolete';
+				break;
+			case ErrorEnum::JSON:
+				$message = 'Could not decode json file';
+				break;
+			case ErrorEnum::KEY_ARRAY:
+				$message = "Invalid array type for key '" . $this->key . "'";
+				break;
+			case ErrorEnum::KEY_OBSOLETE:
+				$color = ColorEnum::YELLOW;
+				$message = "Obsolete key '" . $this->key . "'";
+				break;
+		}
+
+		if ($color) {
+			$message = Color::parse($message, $color);
+		}
+
+		return $message;
 	}
 
 	/**
