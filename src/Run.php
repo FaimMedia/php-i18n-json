@@ -2,6 +2,10 @@
 <?php
 
 use FaimMedia\I18nJson\Compare;
+use FaimMedia\I18nJson\Output\{
+	Color,
+	ColorEnum,
+};
 
 define('ROOT_PATH', realpath(__DIR__ . '/..') . '/');
 define('SOURCE_PATH', ROOT_PATH . 'src/');
@@ -9,9 +13,20 @@ define('TEST_PATH', realpath(__DIR__) . '/');
 
 require ROOT_PATH . 'vendor/autoload.php';
 
-$type = $argv[1] ?? null;
+function outputUsage(): void {
+	echo 'Usage:' . PHP_EOL;
+	echo '    i18n-json [compare|format|generate] [path] [baseLanguage]' . PHP_EOL;
+	echo PHP_EOL;
+};
 
+/**
+ * Check type
+ */
+$type = $argv[1] ?? null;
 if (!in_array($type, ['compare', 'format', 'generate'])) {
+	echo Color::parse('Invalid option provided', ColorEnum::RED, true) . PHP_EOL;
+	outputUsage();
+
 	echo 'Possible options:' . PHP_EOL;
 	echo ' - compare' . PHP_EOL;
 	echo '      Compare all translations' . PHP_EOL;
@@ -24,41 +39,71 @@ if (!in_array($type, ['compare', 'format', 'generate'])) {
 	exit(1);
 }
 
-$required = [
-	'path',
-	'baseLanguage',
-];
+$path = $argv[2] ?? null;
+if (!$path) {
+	echo Color::parse('Invalid path provided', ColorEnum::RED, true) . PHP_EOL;
+	outputUsage();
+	exit(1);
+}
+
+$baseLanguage = $argv[3] ?? null;
+if (!$baseLanguage) {
+	echo Color::parse('Invalid baseLanguage provided', ColorEnum::RED, true) . PHP_EOL;
+	outputUsage();
+	exit(1);
+}
+
+if (!file_exists($path)) {
+	echo Color::parse('The provided path does not exist', ColorEnum::RED, true) . PHP_EOL;
+	exit(2);
+}
+
+if (!file_exists(rtrim($path, '/') . '/' . $baseLanguage)) {
+	echo Color::parse('The provided baseLanguage does not exist', ColorEnum::RED, true) . PHP_EOL;
+	exit(2);
+}
 
 $options = getopt('', [
-	'path:',
-	'baseLanguage:',
 	'debug',
 	'sleep::',
 ]);
 
-$errors = [];
-foreach ($required as $field) {
-	if (!empty($options[$field])) {
-		continue;
-	}
-
-	$errors[] = 'Missing required argument --' . $field;
-}
-
-if ($errors) {
-	echo ' - ' . join(PHP_EOL . ' - ', $errors);
-	echo PHP_EOL;
-	exit(1);
-}
-
+/**
+ * Init
+ */
 $class = FaimMedia\I18nJson::class . '\\' . ucfirst($type);
 
 try {
 	$compare = new $class([
 		...$options,
+		...[
+			'path'         => $path,
+			'baseLanguage' => $baseLanguage,
+		],
 	]);
 
 	$compare->run();
+
+	if ($compare instanceof Compare) {
+		$compare->sortErrors();
+
+		$lastFileName = null;
+		$lastLanguage = null;
+		foreach ($compare->getErrors() as $error) {
+			if (
+				$error->getFileName() !== $lastFileName
+				|| $error->getLanguage() !== $lastLanguage
+			) {
+				echo '[' . $error->getLanguage() . '] ' . $error->getFileName() . PHP_EOL;
+			}
+
+			echo ' - ' . $error->getMessage() . PHP_EOL;
+
+			$lastFileName = $error->getFileName();
+			$lastLanguage = $error->getLanguage();
+		}
+	}
+
 } catch (Throwable $e) {
 	$message = 'An error occurred: ' . $e->getMessage();
 
