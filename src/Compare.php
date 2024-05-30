@@ -4,12 +4,6 @@ declare(strict_types = 1);
 
 namespace FaimMedia\I18nJson;
 
-use FaimMedia\I18nJson\Logger\{
-    ColorEnum,
-    LoggerInterface,
-	Color,
-};
-
 use FaimMedia\I18nJson\Compare\{
 	Exception,
 	Error,
@@ -34,10 +28,7 @@ class Compare
 	/**
 	 * Constructor
 	 */
-	public function __construct(
-		array $options,
-		protected LoggerInterface $logger = new Color(),
-	)
+	public function __construct(array $options)
 	{
 		if (!isset($options['path'])) {
 			throw new Exception('Path option is missing', Exception::PATH);
