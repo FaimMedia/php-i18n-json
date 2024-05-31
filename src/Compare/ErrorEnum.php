@@ -15,4 +15,16 @@ enum ErrorEnum: int
     case KEY = -6;
     case KEY_OBSOLETE = -7;
     case KEY_ARRAY = -8;
+
+    /**
+     * Get array with warnings
+     */
+    public static function getWarnings(): array
+    {
+        return [
+            self::KEY_OBSOLETE,
+            self::FILE_OBSOLETE,
+            self::DIRECTORY_OBSOLETE,
+        ];
+    }
 }
