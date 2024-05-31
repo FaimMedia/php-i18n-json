@@ -2,6 +2,7 @@
 <?php
 
 use FaimMedia\I18nJson\Compare;
+use FaimMedia\I18nJson\Compare\ErrorEnum;
 use FaimMedia\I18nJson\Output\{
 	Color,
 	ColorEnum,
@@ -93,6 +94,8 @@ try {
 	if ($compare instanceof Compare) {
 		$compare->sortErrors();
 
+		$errorCount = 0;
+
 		$lastFileName = null;
 		$lastLanguage = null;
 		foreach ($compare->getErrors() as $error) {
@@ -105,8 +108,16 @@ try {
 
 			echo ' - ' . $error->getMessage() . PHP_EOL;
 
+			if (!in_array($error->getType(), ErrorEnum::getWarnings())) {
+				$errorCount++;
+			}
+
 			$lastFileName = $error->getFileName();
 			$lastLanguage = $error->getLanguage();
+		}
+
+		if ($errorCount) {
+			exit(1);
 		}
 	}
 
