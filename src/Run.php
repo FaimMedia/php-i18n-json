@@ -10,8 +10,14 @@ use FaimMedia\I18nJson\Output\{
 define('ROOT_PATH', realpath(__DIR__ . '/..') . '/');
 define('SOURCE_PATH', ROOT_PATH . 'src/');
 define('TEST_PATH', realpath(__DIR__) . '/');
+define(
+	'VENDOR_PATH',
+	$_ENV['COMPOSER_RUNTIME_BIN_DIR']
+		? realpath($_ENV['COMPOSER_RUNTIME_BIN_DIR'] . '/..') . '/'
+		: ROOT_PATH . 'vendor/',
+);
 
-require ROOT_PATH . 'vendor/autoload.php';
+require VENDOR_PATH . 'autoload.php';
 
 function outputUsage(): void {
 	echo 'Usage:' . PHP_EOL;
