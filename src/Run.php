@@ -13,7 +13,7 @@ define('SOURCE_PATH', ROOT_PATH . 'src/');
 define('TEST_PATH', realpath(__DIR__) . '/');
 define(
 	'VENDOR_PATH',
-	$_ENV['COMPOSER_RUNTIME_BIN_DIR']
+	($_ENV['COMPOSER_RUNTIME_BIN_DIR'] ?? null)
 		? realpath($_ENV['COMPOSER_RUNTIME_BIN_DIR'] . '/..') . '/'
 		: ROOT_PATH . 'vendor/',
 );
