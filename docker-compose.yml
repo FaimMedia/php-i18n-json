@@ -11,7 +11,7 @@ services:
     depends_on:
       - composer
   composer:
-    image: composer:2.7.2
+    image: composer:2.8.1
     volumes:
       - ./vendor:/app/vendor:z
       - ./composer.json:/app/composer.json:r
