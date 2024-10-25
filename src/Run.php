@@ -70,11 +70,6 @@ if (!file_exists(rtrim($path, '/') . '/' . $baseLanguage)) {
 	exit(2);
 }
 
-$options = getopt('', [
-	'debug',
-	'sleep::',
-]);
-
 /**
  * Init
  */
