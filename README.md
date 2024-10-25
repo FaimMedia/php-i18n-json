@@ -33,5 +33,5 @@ Run tests:
 Run validator CLI:
 
 ```bash
-docker compose exec -T test /app/bin/i18n-json --path=/app/test/sql
+docker compose exec -T test /app/bin/i18n-json --path=/app/test/json/compare1
 ```
