@@ -17,6 +17,7 @@ class Compare
 {
 	protected string $path;
 	protected array $languages;
+	protected array $ignoreLanguages;
 	protected array $files;
 	protected string $baseLanguage;
 
@@ -38,6 +39,11 @@ class Compare
 
 		if (!isset($options['baseLanguage'])) {
 			throw new Exception('Base language option is missing', Exception::BASE_LANGUAGE);
+		}
+
+		$this->ignoreLanguages = $options['ignoreLanguages'] ?? [];
+		if (in_array($options['baseLanguage'], $this->ignoreLanguages)) {
+			throw new Exception('Cannot ignore the base language', Exception::INVALID_IGNORE);
 		}
 
 		$this->setBaseLanguage($options['baseLanguage']);
@@ -89,6 +95,13 @@ class Compare
 			}
 
 			$baseName = basename($file);
+
+			/**
+			 * Check if language should be ignored
+			 */
+			if (in_array($baseName, $this->ignoreLanguages)) {
+				continue;
+			}
 
 			$languages[$baseName] = $this->collectFiles($file . '/');
 		}

@@ -22,7 +22,7 @@ require VENDOR_PATH . 'autoload.php';
 
 function outputUsage(): void {
 	echo 'Usage:' . PHP_EOL;
-	echo '    i18n-json [compare|format|generate] [path] [baseLanguage]' . PHP_EOL;
+	echo '    i18n-json [compare|format|generate] [path] [baseLanguage] [ignoreLanguageCode,ignoreLanguageCode,…]' . PHP_EOL;
 	echo PHP_EOL;
 };
 
@@ -82,11 +82,11 @@ $class = FaimMedia\I18nJson::class . '\\' . ucfirst($type);
 
 try {
 	$compare = new $class([
-		...$options,
-		...[
-			'path'         => $path,
-			'baseLanguage' => $baseLanguage,
-		],
+		'path'            => $path,
+		'baseLanguage'    => $baseLanguage,
+		'ignoreLanguages' => ($argv[4] ?? null)
+			? explode(',', $argv[4])
+			: [],
 	]);
 
 	$compare->run();

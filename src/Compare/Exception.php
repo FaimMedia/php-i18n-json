@@ -33,6 +33,11 @@ class Exception extends BaseException
     public const JSON_PARSE = -4;
 
     /**
+     * File could not be parsed
+     */
+    public const INVALID_IGNORE = -5;
+
+    /**
      * Set compare error
      */
     public function setError(Error $error): void
